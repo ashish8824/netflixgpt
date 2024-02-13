@@ -1,17 +1,24 @@
 import React, { useRef, useState } from "react";
 import Header from "./Header";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { checkValidation } from "../utils/validations/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/store/slices/userSlice";
 
 const LogIn = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
+  const fullName = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
   const confirmPassword = useRef(null);
@@ -38,7 +45,21 @@ const LogIn = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
-          console.log(user);
+          updateProfile(user, {
+            displayName: fullName.current.value,
+          })
+            .then(() => {
+              // Profile updated!
+              const { uid, email, displayName } = auth.currentUser;
+              dispatch(
+                addUser({ uid: uid, email: email, displayName: displayName })
+              );
+              navigate("/browse");
+            })
+            .catch((error) => {
+              // An error occurred
+              setErrorMessage(error.message);
+            });
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -57,11 +78,12 @@ const LogIn = () => {
           // Signed in
           const user = userCredential.user;
           console.log("login =>", user);
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
-          const errorMessage = error.message;
-          setErrorMessage("message=> ", errorCode + "-" + errorMessage);
+          // const errorMessage = error.message;
+          setErrorMessage(errorCode.slice(5));
         });
     }
 
@@ -91,6 +113,7 @@ const LogIn = () => {
           </h1>
           {!isSignIn && (
             <input
+              ref={fullName}
               className="w-full bg-zinc-950  p-4 rounded-md border border-white mb-8"
               type="text"
               placeholder="Enter Full Name"
