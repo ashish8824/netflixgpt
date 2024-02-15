@@ -10,6 +10,7 @@ import { auth } from "../utils/firebase";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { USER_SIGNOUT_SECTION } from "../utils/constants";
 
 const SignOutList = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const SignOutList = () => {
           <img
             className="inline-block mr-2"
             alt="logo"
-            src="https://occ-0-2610-3646.1.nflxso.net/dnm/api/v6/vN7bi_My87NPKvsBoib006Llxzg/AAAABXz4LMjJFidX8MxhZ6qro8PBTjmHbxlaLAbk45W1DXbKsAIOwyHQPiMAuUnF1G24CLi7InJHK4Ge4jkXul1xIW49Dr5S7fc.png?r=e6e"
+            src={USER_SIGNOUT_SECTION}
           />
           {displayName}
         </li>

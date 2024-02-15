@@ -15,6 +15,12 @@
 - implemented signout api
 - created signoutlist component
 - implement update profile
+- BugFix: Sign upuserName update
+- BugFix: If user is not logged in then don't let user to access brwose page redirect him to login page and vice-versa
+- Unsubscribe to the onAuthStateChanged callback
+- Added hard code to the constant file
+- Register to the TMDB and created app to get api key and access token
+- Get data from nowPlaying api to get movie list from TMB
 
 # Features
 
